@@ -35,6 +35,15 @@ DBのテーブルにダミーデータを投入
 srcディレクトリにあるstorageディレクトリ以下の権限を変更
 $ chmod -R 777 storage
 ```
+##　使用技術
+・PHP　7.4.9
+・Laravel　8.38.8
+・MySQL　8.0
+
+## URL
+・問合せフォーム：http://localhost/
+・管理画面：http://localhost/admin
+
 
 ## ER図
 ![ER図](ER.drawio.png)

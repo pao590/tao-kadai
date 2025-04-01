@@ -51,7 +51,7 @@
               <input type="email" name="email" placeholder="test@example.com" value="{{ old('email') }}" />
             </div>
             <div class="form__error">
-              @error('name')
+              @error('email')
               {{ $message }}
               @enderror
             </div>
@@ -67,7 +67,7 @@
               <input type="tel" name="tel" placeholder="09012345678" value="{{ old('tel') }}"/>
             </div>
             <div class="form__error">
-              @error('name')
+              @error('tel')
               {{ $message }}
               @enderror
             </div>
