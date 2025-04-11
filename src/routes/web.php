@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +15,20 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', [ContactController::class, 'index']);
-Route::POST('/contacts/confirm',[ContactController::class, 'confirm']);
-Route::POST('/contacts', [ContactController::class, 'store']);
-Route::middleware('auth')->group(function(){
-    Route::get('/admin', [AuthController::class, 'index']);
+Route::get('/', function () {
+    return view('welcome');
 });
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
+
+    Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/{id}', [ContactController::class, 'show'])->name('contacts.show');
+    Route::get('/contacts/{id}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
+    Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
+});
+
+require __DIR__.'/auth.php';
