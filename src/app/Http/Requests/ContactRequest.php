@@ -24,23 +24,40 @@ class ContactRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'email' => ['required', 'string', 'email','max:255'],
-            'tel' => ['required', 'numeric', 'digits_between:10,11'],
+            'last_name' => ['required'],
+            'first_name' => ['required'],
+            'gender' => ['required'],
+            'email' => ['required','email'],
+            'tel1' => ['required','degits_between:1,5','regex:/^[0-9]+$/'],
+            'tel2' => ['required','degits_between:1,5','regex:/^[0-9]+$/'],
+            'tel3' => ['required','degits_between:1,5','regex:/^[0-9]*$/'],
+            'address' => ['required'],
+            'category_id' => ['required'],
+            'detail' => ['required','max:120'],
         ];
     }
 
     public function messages()
     {
         return[
-            'name.required' => 'お名前を入力してください',
+            'last_name.required' => '姓を入力してください',
+            'first_name.required' => '名を入力してください',
+            'gender.required' => '性別を入力してください',
             'email.required' => 'メールアドレスを入力してください',
-            'email.string' => 'メールアドレスを文字列で入力してください',
-            'email.email' => '有効なメールアドレス形式を入力してください',
-            'email.max' => 'メールアドレスを255文字以下で入力してください',
-            'tel.required' => '電話番号を入力してください',
-            'tel.numeric' => '電話番号を数値で入力してください',
-            'tel.digits_between' => '電話番号を10桁から11桁の間で入力してください',
+            'email.email' => 'メールアドレスはメール形式で入力してください',
+            'tel1.required' => '電話番号を入力してください',
+            'tel2.required' => '電話番号を入力してください',
+            'tel3.required' => '電話番号を入力してください',
+            'tel1.digits_between' => '電話番号は5桁までの数字で入力してください',
+            'tel2.digits_between' => '電話番号は5桁までの数字で入力してください',
+            'tel3.digits_between' => '電話番号は5桁までの数字で入力してください',
+            'tel1.regix' => '電話番号は数字のみで入力してください',
+            'tel2.regix' => '電話番号は数字のみで入力してください',
+            'tel3.regix' => '電話番号は数字のみで入力してください',
+            'address.required' => '住所を入力してください',
+            'category_id.required' => 'お問い合わせの種類を選択してください',
+            'detail.required' => 'お問い合わせの内容を入力してください',
+            'detail.max' => 'お問い合わせの内容は120文字以内で入力してください',
         ];
     }
 }

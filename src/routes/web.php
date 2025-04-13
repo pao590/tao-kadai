@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-
+use App\Http\Controllers\ContactController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,16 +18,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('admin.dashboard');
+//一般ユーザー向け
+    Route::get('/contact',[ContactController::class, 'showForm'])->name('contact.form');
+    Route::post('/contact/confirm',[ContactController::class,'confirm'])->name('contact.confirm');
+    Route::post('/contact/submit')->name('contact.submit');
+    Route::get('/contact/thankyou',function(){
+        return view('contact.thankyou');
+    })->name('contact.thankyou');
+
+    //管理者向け
+    Route::middleware(['auth','admin'])->prefix('admin')->name('admin')->group(function(){
+        Route::get('/',function(){
+            return redirect()->route('admin.dashboard');
+        });
+
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     });
-
-    Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
-    Route::get('/contacts/{id}', [ContactController::class, 'show'])->name('contacts.show');
-    Route::get('/contacts/{id}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
-    Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
-});
-
-require __DIR__.'/auth.php';
