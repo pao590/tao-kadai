@@ -2,64 +2,133 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Controllers;
 use App\Http\Requests\ContactRequest;
-use App\Models\Contact;
 use App\Models\Category;
-use Illuminate\Support\Facades\Session;
+use App\Models\Contact;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ContactController extends Controller
 {
-    public function showForm()
+    public function index()
     {
         $categories = Category::all();
-        return view('contact.form',compact('categories'));
+        return view('contact',compact('categories'));
     }
 
     public function confirm(ContactRequest $request)
     {
-        $input = $request->all();
-        Session::put('contact_input',$input);
-
-        $category = Category::find($input['category_id']);
-        return view('contact.confirm',[
-            'input' =>$input,
-            'category' => $category
-        ]);
+        $contacts = $request->all();
+        $category = Category::find($request->category_id);
+        return view('confirm',compact('contacts','category'));
     }
 
-    public function store(Request $request)
+    public function store(ContactRequest $request)
     {
-        $input = Session::get('contact_input');
-
-        if(!$input){
-            return redirect()->route('contact.form');
+        if($request ->has('back')){
+            return redirect('/')->withInput();
         }
 
-        Contact::create([
-            'last_name' => $input['last_name'],
-            'first_name' => $input['first_name'],
-            'gender' => $input['gender'],
-            'email' => $input['email'],
-            'tel' => $input['tel1'].$input['tel2'].$input['tel3'],
-            'address' => $input['address'],
-            'building' => $input['building'],
-            'category_id' => $input['category_id'],
-            'detail' => $input['detail'],
-        ]);
+        $request['tell'] = $request->tel_1 . $request->tel_2 . $request->tel_3;
+        Contact::create(
+            $request->only([
+                'category_id',
+                'first_name',
+                'last_name',
+                'gender',
+                'email',
+                'tell',
+                'address',
+                'building',
+                'detail'
+            ])
+        );
 
-        Session::forget('contact_input');
-
-        return redirect() ->route('contact.thankyou');
+        return view('thanks');
     }
 
-    public function back()
-    {
-        $input = Session::get('contact_input');
+   public function admin()
+   {
+        $contacts = Contact::with('category')->paginate(7);
         $categories = Category::all();
-        return view('contact.form',[
-            'input' => $input,
-            'categories' => $categories
-        ]);
+        $csvData = Contact::all();
+        return view('admin', compact('contacts','categories','csvData'));
+   }
+
+   public function search(Request $request)
+   {
+        if ($request->has('reset')){
+            return redirect('/admin')->withInput();
     }
+        $query = Contact::query();
+
+        $query = $this->getSearchAuery($request, $query);
+
+        $contacts = $query->paginate(7);
+        $csvData = $query->get();
+        $categories = Category::all();
+        return view('admin',compact('contacts','categories','csvData'));
+   }
+
+   public function export(Request $request)
+   {
+        $query = Contact::query();
+
+        $query = $this->getSearchQuery($request,$query);
+
+        $csvData = $query->get()->toArray();
+
+        $csvHeader =[
+            'id', 'category_id','first_name', 'gender', 'email','tell','address','building','detail','created_at','updated_at'
+        ];
+
+        $respose = new StreameResponse(function()use($csvHeader,$csvData){
+            $$createCsvFile =fopen('php://output','w');
+
+            md_convert_variables('SJIS-win','UTF-8',$csvHeader);
+
+            fputcsv($createCsvFile,$csvHeader);
+
+            foreach($csvData as $csv) {
+                $csv['creted_at'] = Date::make($csv['created_at'])->setTimezone('Asia/Tokyo')->format('Y/m/d H:i:s');
+
+                $csv['updated_at'] = Date::make($csv['updated_at'])->setTimezone('Asia/Tokyo')->format('Y/m/d H:i:s');
+
+                fputcsv($createCsvFile, $csv);
+            }
+
+            fclose($createCsvFile);
+        },200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="contacts.csv"',
+        ]);
+
+        return $response;
+   }
+
+   private function getSearchQuery($request,$query)
+   {
+        if(!empty($request->keyword)){
+            $query->where(function($q) use($request){
+                $q->where('first_name', 'like','%' . $request->keyword . '%')
+                ->onWhere('last_name', 'like','%' . $request->keyword . '%')
+                ->onWhere('email', 'like','%' . $request->keyword . '%');
+            });
+        }
+
+        if(!empty($request->gender)){
+            $query->where('gender','=',$request->gender);
+        }
+
+        if(!empty($request->category_id)){
+            $query->where('category_id','=',$request->category_id);
+        }
+
+        if(!empty($request->data)){
+            $query->whereDate('created_at','=',$request->date);
+        }
+
+        return $query;
+   }
 }

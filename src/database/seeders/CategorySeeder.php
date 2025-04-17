@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
-class CategorySeeder extends Seeder
+class CategoriesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $categories = [
+        $contents = [
             '商品のお届けについて',
             '商品の交換について',
             '商品トラブル',
@@ -22,8 +22,10 @@ class CategorySeeder extends Seeder
             'その他',
         ];
 
-        foreach($categories as $category){
-            Category::create(['name' => $category]);
+        foreach($contents as $content){
+            DB::table('categories')->insert([
+                'content' => $content,
+            ]);
         }
     }
 }
