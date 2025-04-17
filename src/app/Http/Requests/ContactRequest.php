@@ -34,6 +34,8 @@ class ContactRequest extends FormRequest
             'address' => 'required',
             'category_id' => 'required',
             'detail' => 'required | max:120',
+            'channels' => 'nullable|array',
+            'channels.*' => 'exits:channels,id',
         ];
     }
 

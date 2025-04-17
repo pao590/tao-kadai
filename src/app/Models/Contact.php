@@ -17,4 +17,9 @@ class Contact extends Model
         {
             return $this->belongsTo(Category::class);
         }
+
+        public function channels()
+        {
+            return $this->belongsTomany(Channels::class);
+        }
 }

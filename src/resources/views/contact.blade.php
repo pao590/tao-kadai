@@ -32,6 +32,27 @@
 
       <div class="contact-form__group">
         <label class="contact-form__label">
+        どこで知りましたか？
+        </label>
+        <div class="contact-form__checkbox-group">
+         @foreach($channels as $channel)
+            <label class="contact-form__checkbox-label">
+            <input type="checkbox" name="channels[]" value="{{ $channel->id }}"
+             {{ is_array(old('channels')) && in_array($channel->id, old('channels')) ? 'checked' : '' }}>
+             {{ $channel->name }}
+            </label>
+            @endforeach
+        </div>
+        <p class="contact-form__error-message">
+         @error('channels')
+          {{ $message }}
+         @enderror
+        </p>
+        </div>
+
+
+      <div class="contact-form__group">
+        <label class="contact-form__label">
           性別<span class="contact-form__required">※</span>
         </label>
         <div class="contact-form__gender-inputs">

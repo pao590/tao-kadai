@@ -18,6 +18,16 @@
           <input type="hidden" name="last_name" value="{{ $contacts['last_name'] }}">
         </tr>
         <tr class="confirm-form__row">
+          <th class="confirm-form__label">どこで知りましたか？</th>
+          <td class="confirm-form__data">
+            @foreach($contacts['channels'] as $channel_id)
+            {{ $channels->firstWhere('id', $channel_id)->name }}{{ !$loop->last ? ', ' : '' }}
+            <input type="hidden" name="channels[]" value="{{ $channel_id }}">
+          @endforeach
+          </td>
+        </tr>
+
+        <tr class="confirm-form__row">
           <th class="confirm-form__label">性別</th>
           <td class="confirm-form__data">
             @if($contacts['gender'] == 1)
