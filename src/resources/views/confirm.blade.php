@@ -68,6 +68,12 @@
           <input type="hidden" name="category_id" value="{{ $contacts['category_id'] }}">
         </tr>
         <tr class="confirm-form__row">
+          <th class="confirm-form__label">商品名</th>
+          <td class="confirm-form__data">{{ $item->content }}</td>
+          <input type="hidden" name="item_id" value="{{ $contacts['item_id'] }}">
+        </tr>
+
+        <tr class="confirm-form__row">
           <th class="confirm-form__label">お問い合わせ内容</th>
           <td class="confirm-form__data">{{ $contacts['detail'] }}</td>
           <input type="hidden" name="detail" value="{{ $contacts['detail'] }}">

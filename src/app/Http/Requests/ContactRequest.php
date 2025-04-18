@@ -36,6 +36,7 @@ class ContactRequest extends FormRequest
             'detail' => 'required | max:120',
             'channels' => 'nullable|array',
             'channels.*' => 'exits:channels,id',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -60,6 +61,9 @@ class ContactRequest extends FormRequest
             'category_id.required' => 'お問い合わせの種類を選択してください',
             'detail.required' => 'お問い合わせの内容を入力してください',
             'detail.max' => 'お問い合わせの内容は120文字以内で入力してください',
+            'image_file.image' => 'アップロードされるファイルは画像ファイルのみです',
+            'image_file.mimes' => '画像ファイルはjpeg, png, jpg, gif, svg形式のみ対応しています',
+            'image_file.max' => '画像ファイルは2MB以下でアップロードしてください',
         ];
     }
 }

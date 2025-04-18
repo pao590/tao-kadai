@@ -8,7 +8,7 @@
 <div class="contact-form">
   <h2 class="contact-form__heading content__heading">Contact</h2>
   <div class="contact-form__inner">
-    <form action="confirm" method="post">
+    <form action="confirm" method="post" enctype="multipart/form-data">
       @csrf
       <div class="contact-form__group contact-form__name-group">
         <label class="contact-form__label" for="name">
@@ -160,10 +160,44 @@
         </p>
       </div>
 
+      
       <div class="contact-form__group">
         <label class="contact-form__label" for="detail">
           お問い合わせ内容<span class="contact-form__required">※</span>
         </label>
+        <div class="contact-form__group">
+            <label class="contact-form__label" for="item_id">
+                問い合わせの商品を選択
+            </label>
+        <div class="contact-form__select-inner">
+        <select class="contact-form__select" name="item_id" id="item_id">
+            <option value="" disabled {{ old('item_id') ? '' : 'selected' }}>選択してください</option>
+             @foreach($items as $item)
+            <option value="{{ $item->id }}" {{ old('item_id') == $item->id ? 'selected' : '' }}>
+             {{ $item->content }}
+            </option>
+             @endforeach
+        </select>
+        </div>
+            <p class="contact-form__error-message">
+            @error('item_id')
+            {{ $message }}
+            @enderror
+            </p>
+        </div>
+
+        <div class="contact-form__group">
+            <label class="contact-form__label" for="image_file">
+            画像アップロード
+            </label>
+            <input type="file" name="image_file" id="image_file" class="contact-form__input">
+            <p class="contact-form__error-message">
+                @error('file')
+                {{ $message }}
+                @enderror
+            </p>
+        </div>
+
         <textarea class="contact-form__textarea" name="detail" id="" cols="30" rows="10"
           placeholder="お問い合わせ内容をご記載ください">{{ old('detail') }}</textarea>
         <p class="contact-form__error-message">
