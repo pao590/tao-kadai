@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
 use App\Models\Category;
+use App\Models\Channel;
+use App\Models\Item;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -70,6 +72,7 @@ class ContactController extends Controller
         $contacts = Contact::with('category')->paginate(7);
         $categories = Category::all();
         $csvData = Contact::all();
+        dd($categories);
         return view('admin', compact('contacts', 'categories', 'csvData'));
     }
 
