@@ -32,23 +32,23 @@
 
       <div class="contact-form__group">
         <label class="contact-form__label">
-        どこで知りましたか？
+          どこで知りましたか？
         </label>
         <div class="contact-form__checkbox-group">
-         @foreach($channels as $channel)
-            <label class="contact-form__checkbox-label">
+          @foreach($channels as $channel)
+          <label class="contact-form__checkbox-label">
             <input type="checkbox" name="channels[]" value="{{ $channel->id }}"
-             {{ is_array(old('channels')) && in_array($channel->id, old('channels')) ? 'checked' : '' }}>
-             {{ $channel->name }}
-            </label>
-            @endforeach
+              {{ is_array(old('channels')) && in_array($channel->id, old('channels')) ? 'checked' : '' }}>
+            {{ $channel->name }}
+          </label>
+          @endforeach
         </div>
         <p class="contact-form__error-message">
-         @error('channels')
+          @error('channels')
           {{ $message }}
-         @enderror
+          @enderror
         </p>
-        </div>
+      </div>
 
 
       <div class="contact-form__group">
@@ -141,14 +141,14 @@
       </div>
 
       <div class="contact-form__group">
-        <label class="contact-form__label" for="">
+        <label class="contact-form__label" for="category_id">
           お問い合わせの種類<span class="contact-form__required">※</span>
         </label>
         <div class="contact-form__select-inner">
-          <select class="contact-form__select" name="category_id" id="">
+          <select class="contact-form__select" name="category_id" id="category_id">
             <option disabled selected>選択してください</option>
             @foreach($categories as $category)
-            <option value="{{ $category->id }}" {{ old('category_id')==$category->id ? 'selected' : '' }}>{{
+            <option value="{{ $category->id }}" {{ old ('category_id') == $category->id ? 'selected' : '' }}>{{
               $category->content }}</option>
             @endforeach
           </select>
@@ -160,54 +160,56 @@
         </p>
       </div>
 
-      
+    <div class="contact-form__group">
+      <label class="contact-form__label" for="detail">
+        お問い合わせ内容<span class="contact-form__required">※</span>
+      </label>
+      <textarea class="contact-form__textarea" name="detail" id="" cols="30" rows="10"
+        placeholder="お問い合わせ内容をご記載ください">{{ old('detail') }}</textarea>
+      <p class="contact-form__error-message">
+        @error('detail')
+        {{ $message }}
+        @enderror
+      </p>
+    </div>
+
       <div class="contact-form__group">
-        <label class="contact-form__label" for="detail">
-          お問い合わせ内容<span class="contact-form__required">※</span>
+        <label class="contact-form__label" for="item_id">
+          問い合わせの商品を選択
         </label>
-        <div class="contact-form__group">
-            <label class="contact-form__label" for="item_id">
-                問い合わせの商品を選択
-            </label>
         <div class="contact-form__select-inner">
-        <select class="contact-form__select" name="item_id" id="item_id">
+          <select class="contact-form__select" name="item_id" id="item_id">
             <option value="" disabled {{ old('item_id') ? '' : 'selected' }}>選択してください</option>
-             @foreach($items as $item)
+            @foreach($items as $item)
             <option value="{{ $item->id }}" {{ old('item_id') == $item->id ? 'selected' : '' }}>
-             {{ $item->content }}
+              {{ $item->content }}
             </option>
-             @endforeach
-        </select>
+            @endforeach
+          </select>
         </div>
-            <p class="contact-form__error-message">
-            @error('item_id')
-            {{ $message }}
-            @enderror
-            </p>
-        </div>
-
-        <div class="contact-form__group">
-            <label class="contact-form__label" for="image_file">
-            画像アップロード
-            </label>
-            <input type="file" name="image_file" id="image_file" class="contact-form__input">
-            <p class="contact-form__error-message">
-                @error('file')
-                {{ $message }}
-                @enderror
-            </p>
-        </div>
-
-        <textarea class="contact-form__textarea" name="detail" id="" cols="30" rows="10"
-          placeholder="お問い合わせ内容をご記載ください">{{ old('detail') }}</textarea>
         <p class="contact-form__error-message">
-          @error('detail')
+          @error('item_id')
           {{ $message }}
           @enderror
         </p>
       </div>
-      <input class="contact-form__btn btn" type="submit" value="確認画面">
-    </form>
+
+    <div class="contact-form__group">
+      <label class="contact-form__label" for="image_file">
+        画像アップロード
+      </label>
+      <input type="file" name="image_file" id="image_file" class="contact-form__input">
+      <p class="contact-form__error-message">
+        @error('file')
+        {{ $message }}
+        @enderror
+      </p>
+    </div>
+
+
   </div>
+  <input class="contact-form__btn btn" type="submit" value="確認画面">
+  </form>
+</div>
 </div>
 @endsection

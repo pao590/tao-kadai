@@ -10,7 +10,7 @@
     align-items: center;
     margin-top: 32px;
 
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 200px 1fr;
 }
 
 .contact-form__group:first-of-type {
@@ -139,4 +139,10 @@
 .contact-form__error-message-first-name,
 .contact-form__error-message-last-name {
     width: 100%;
+}
+
+.contact-form__label{
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
 }

@@ -58,6 +58,9 @@
         <th class="admin__label">性別</th>
         <th class="admin__label">メールアドレス</th>
         <th class="admin__label">お問い合わせの種類</th>
+        <th class="admin__label">お問い合わせ内容</th>
+        <th class="admin__label">お問い合わせの商品を選択</th>
+        <th class="admin__label">画像アップロード</th>
         <th class="admin__label"></th>
       </tr>
       @foreach($contacts as $contact)
