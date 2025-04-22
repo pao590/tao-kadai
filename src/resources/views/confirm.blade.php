@@ -20,10 +20,14 @@
         <tr class="confirm-form__row">
           <th class="confirm-form__label">どこで知りましたか？</th>
           <td class="confirm-form__data">
-            @foreach($contacts['channels'] as $channel_id)
-            {{ $channels->firstWhere('id', $channel_id)->name }}{{ !$loop->last ? ', ' : '' }}
-            <input type="hidden" name="channels[]" value="{{ $channel_id }}">
-          @endforeach
+            @if (!empty($contacts['channels']))
+              @foreach($contacts['channels'] as $channel_id)
+              {{ $channels->firstWhere('id', $channel_id)->name }}{{ !$loop->last ? ', ' : '' }}
+              <input type="hidden" name="channels[]" value="{{ $channel_id }}">
+              @endforeach
+            @else
+              選択なし
+            @endif
           </td>
         </tr>
 

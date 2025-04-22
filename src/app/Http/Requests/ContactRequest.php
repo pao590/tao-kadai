@@ -27,22 +27,23 @@ class ContactRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'gender' => 'required',
-            'email' => 'required | email',
-            'tel1' => 'required | max:5 | regex:/^[0-9]+$/',
-            'tel2' => 'required | max:5 | regex:/^[0-9]+$/',
-            'tel3' => 'required | max:5 | regex:/^[0-9]+$/',
+            'email' => 'required|email',
+            'tel_1' => 'required|max:5|regex:/^[0-9]+$/',
+            'tel_2' => 'required|max:5|regex:/^[0-9]+$/',
+            'tel_3' => 'required|max:5|regex:/^[0-9]+$/',
             'address' => 'required',
             'category_id' => 'required',
-            'detail' => 'required | max:120',
+            'detail' => 'required|max:120',
+            'item_id' => 'required',
             'channels' => 'nullable|array',
-            'channels.*' => 'exits:channels,id',
+            'channels.*' => 'exists:channels,id',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
     public function messages()
     {
-        return[
+        return [
             'first_name.required' => '姓を入力してください',
             'last_name.required' => '名を入力してください',
             'gender.required' => '性別を選択してください',
@@ -61,6 +62,7 @@ class ContactRequest extends FormRequest
             'category_id.required' => 'お問い合わせの種類を選択してください',
             'detail.required' => 'お問い合わせの内容を入力してください',
             'detail.max' => 'お問い合わせの内容は120文字以内で入力してください',
+            'item_id.required' => '商品の種類を選択してください',
             'image_file.image' => 'アップロードされるファイルは画像ファイルのみです',
             'image_file.mimes' => '画像ファイルはjpeg, png, jpg, gif, svg形式のみ対応しています',
             'image_file.max' => '画像ファイルは2MB以下でアップロードしてください',

@@ -18,7 +18,7 @@ class ContactController extends Controller
         $categories = Category::all();
         $channels = Channel::all();
         $items = Item::all();
-        return view('contact', compact('categories','channels','items'));
+        return view('contact', compact('categories', 'channels', 'items'));
     }
 
     public function confirm(ContactRequest $request)
@@ -38,10 +38,10 @@ class ContactController extends Controller
         $request['tell'] = $request->tel_1 . $request->tel_2 . $request->tel_3;
 
         $filePath = null;
-        if($request->hasFile('image_file')){
+        if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $imageFilePath = $file->storeAs('image',$fileName,'public');
+            $imageFilePath = $file->storeAs('image', $fileName, 'public');
         }
 
         $contact = Contact::create(
@@ -55,12 +55,12 @@ class ContactController extends Controller
                 'address',
                 'building',
                 'detail'
-            ])+[
+            ]) + [
                 'image_file' => $imageFilePath
             ]
         );
 
-        if($request->has('channels')){
+        if ($request->has('channels')) {
             $contact->channels()->sync($request->channels);
         }
 
@@ -98,10 +98,20 @@ class ContactController extends Controller
 
         $csvData = $query->get()->toArray();
         $csvHeader = [
-            'id', 'category_id', 'first_name', 'gender', 'email', 'tell', 'address', 'building', 'detail', 'created_at', 'updated_at'
+            'id',
+            'category_id',
+            'first_name',
+            'gender',
+            'email',
+            'tell',
+            'address',
+            'building',
+            'detail',
+            'created_at',
+            'updated_at'
         ];
 
-        $response = new StreamedResponse(function() use ($csvHeader, $csvData) {
+        $response = new StreamedResponse(function () use ($csvHeader, $csvData) {
             $createCsvFile = fopen('php://output', 'w');
             mb_convert_variables('SJIS-win', 'UTF-8', $csvHeader);
             fputcsv($createCsvFile, $csvHeader);
@@ -124,10 +134,10 @@ class ContactController extends Controller
     private function getSearchQuery($request, $query)
     {
         if (!empty($request->keyword)) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('first_name', 'like', '%' . $request->keyword . '%')
-                  ->orWhere('last_name', 'like', '%' . $request->keyword . '%')
-                  ->orWhere('email', 'like', '%' . $request->keyword . '%');
+                    ->orWhere('last_name', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('email', 'like', '%' . $request->keyword . '%');
             });
         }
 
@@ -146,4 +156,3 @@ class ContactController extends Controller
         return $query;
     }
 }
-
