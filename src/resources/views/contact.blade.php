@@ -200,7 +200,7 @@
       </label>
       <input type="file" name="image_file" id="image_file" class="contact-form__input">
       <p class="contact-form__error-message">
-        @error('file')
+        @error('image_file')
         {{ $message }}
         @enderror
       </p>

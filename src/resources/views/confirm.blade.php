@@ -21,12 +21,12 @@
           <th class="confirm-form__label">どこで知りましたか？</th>
           <td class="confirm-form__data">
             @if (!empty($contacts['channels']))
-              @foreach($contacts['channels'] as $channel_id)
-              {{ $channels->firstWhere('id', $channel_id)->name }}{{ !$loop->last ? ', ' : '' }}
-              <input type="hidden" name="channels[]" value="{{ $channel_id }}">
-              @endforeach
+            @foreach($contacts['channels'] as $channel_id)
+            {{ $channels->firstWhere('id', $channel_id)->name }}{{ !$loop->last ? ', ' : '' }}
+            <input type="hidden" name="channels[]" value="{{ $channel_id }}">
+            @endforeach
             @else
-              選択なし
+            選択なし
             @endif
           </td>
         </tr>
@@ -76,6 +76,15 @@
           <td class="confirm-form__data">{{ $item->content }}</td>
           <input type="hidden" name="item_id" value="{{ $contacts['item_id'] }}">
         </tr>
+        @if (!empty($contacts['image_file']))
+        <tr class="confirm-form__row">
+          <th class="confirm-form__label">アップロード画像</th>
+          <td class="confirm-form__data">
+            <img src="{{ asset('storage/' . $contacts['image_file']) }}" alt="アップロード画像" style="max-width: 300px;">
+            <input type="hidden" name="image_file" value="{{ $contacts['image_file'] }}">
+          </td>
+        </tr>
+        @endif
 
         <tr class="confirm-form__row">
           <th class="confirm-form__label">お問い合わせ内容</th>

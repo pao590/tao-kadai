@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ContactController::class, 'index']);
 Route::post('/confirm', [ContactController::class, 'confirm']);
-Route::post('/thanks', [ContactController::class, 'store']);
+Route::post('/thanks',function() {
+    return view('thanks');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin', [ContactController::class, 'admin']);

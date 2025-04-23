@@ -24,9 +24,18 @@ class ContactController extends Controller
     public function confirm(ContactRequest $request)
     {
         $contacts = $request->all();
+
+        if ($request->hasFile('image_file')) {
+            $imagePath = $request->image_file->store('image', 'public');
+            $contacts['image_file'] = $imagePath;
+        }else{
+            $contacts['image_file'] = null;
+        }
+
+        $channels = Channel::all();
         $category = Category::find($request->category_id);
         $item = Item::find($request->item_id);
-        return view('confirm', compact('contacts', 'category'));
+        return view('confirm', compact('contacts', 'category', 'item', 'channels'));
     }
 
     public function store(ContactRequest $request)
@@ -37,12 +46,7 @@ class ContactController extends Controller
 
         $request['tell'] = $request->tel_1 . $request->tel_2 . $request->tel_3;
 
-        $filePath = null;
-        if ($request->hasFile('image_file')) {
-            $file = $request->file('image_file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $imageFilePath = $file->storeAs('image', $fileName, 'public');
-        }
+        $imageFilePath = $request->image_file ?? null;
 
         $contact = Contact::create(
             $request->only([
@@ -64,7 +68,7 @@ class ContactController extends Controller
             $contact->channels()->sync($request->channels);
         }
 
-        return view('thanks');
+        return redirect('thanks');
     }
 
     public function admin()
@@ -72,7 +76,6 @@ class ContactController extends Controller
         $contacts = Contact::with('category')->paginate(7);
         $categories = Category::all();
         $csvData = Contact::all();
-        dd($categories);
         return view('admin', compact('contacts', 'categories', 'csvData'));
     }
 
