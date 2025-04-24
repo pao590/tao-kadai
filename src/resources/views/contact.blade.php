@@ -8,7 +8,7 @@
 <div class="contact-form">
   <h2 class="contact-form__heading content__heading">Contact</h2>
   <div class="contact-form__inner">
-    <form action="confirm" method="post" enctype="multipart/form-data">
+    <form action="/confirm" method="post" enctype="multipart/form-data">
       @csrf
       <div class="contact-form__group contact-form__name-group">
         <label class="contact-form__label" for="name">

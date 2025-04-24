@@ -40,6 +40,7 @@ class ContactController extends Controller
 
     public function store(ContactRequest $request)
     {
+        dd($request->all());
         if ($request->has('back')) {
             return redirect('/')->withInput();
         }
