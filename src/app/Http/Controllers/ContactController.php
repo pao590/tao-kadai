@@ -28,7 +28,7 @@ class ContactController extends Controller
         if ($request->hasFile('image_file')) {
             $imagePath = $request->image_file->store('image', 'public');
             $contacts['image_file'] = $imagePath;
-        }else{
+        } else {
             $contacts['image_file'] = null;
         }
 
@@ -38,14 +38,13 @@ class ContactController extends Controller
         return view('confirm', compact('contacts', 'category', 'item', 'channels'));
     }
 
-    public function store(ContactRequest $request)
+    public function store(Request $request)
     {
-        dd($request->all());
         if ($request->has('back')) {
             return redirect('/')->withInput();
         }
 
-        $request['tell'] = $request->tel_1 . $request->tel_2 . $request->tel_3;
+        $request['tel'] = $request->tel_1 . $request->tel_2 . $request->tel_3;
 
         $imageFilePath = $request->image_file ?? null;
 
@@ -56,7 +55,7 @@ class ContactController extends Controller
                 'last_name',
                 'gender',
                 'email',
-                'tell',
+                'tel',
                 'address',
                 'building',
                 'detail'

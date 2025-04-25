@@ -20,6 +20,6 @@ class Contact extends Model
 
         public function channels()
         {
-            return $this->belongsTomany(Channel::class);
+            return $this->belongsToMany(Channel::class, 'contact_channel');
         }
 }
